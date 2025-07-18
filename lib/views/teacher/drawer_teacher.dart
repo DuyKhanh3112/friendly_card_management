@@ -26,7 +26,7 @@ class DrawerTeacher extends StatelessWidget {
                   ),
                   child: ListTile(
                     leading: Image.asset(
-                      'images/personal_info_icon.png',
+                      'assets/images/personal_info_icon.png',
                       width: 64,
                     ),
                     title: Text(
@@ -54,7 +54,10 @@ class DrawerTeacher extends StatelessWidget {
                         // horizontal: 5,
                         vertical: 3,
                       ),
-                      child: Image.asset('images/topic_icon.png', width: 64),
+                      child: Image.asset(
+                        'assets/images/topic_icon.png',
+                        width: 64,
+                      ),
                     ),
                     title: Text(
                       'Chủ đề',
@@ -76,7 +79,10 @@ class DrawerTeacher extends StatelessWidget {
                     vertical: Get.height * 0.02,
                   ),
                   child: ListTile(
-                    leading: Image.asset('images/logout_icon.png', width: 64),
+                    leading: Image.asset(
+                      'assets/images/logout_icon.png',
+                      width: 64,
+                    ),
                     title: Text(
                       'Đăng xuất',
                       style: TextStyle(

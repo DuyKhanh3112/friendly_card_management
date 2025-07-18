@@ -26,7 +26,7 @@ class DrawerAdmin extends StatelessWidget {
                   ),
                   child: ListTile(
                     leading: Image.asset(
-                      'images/personal_info_icon.png',
+                      'assets/images/personal_info_icon.png',
                       width: 64,
                     ),
                     title: Text(
@@ -49,7 +49,10 @@ class DrawerAdmin extends StatelessWidget {
                     vertical: Get.height * 0.02,
                   ),
                   child: ListTile(
-                    leading: Image.asset('images/teacher_icon.png', width: 64),
+                    leading: Image.asset(
+                      'assets/images/teacher_icon.png',
+                      width: 64,
+                    ),
                     title: Text(
                       'Giáo viên chuyên môn',
                       style: TextStyle(
@@ -75,7 +78,10 @@ class DrawerAdmin extends StatelessWidget {
                         // horizontal: 5,
                         vertical: 3,
                       ),
-                      child: Image.asset('images/topic_icon.png', width: 64),
+                      child: Image.asset(
+                        'assets/images/topic_icon.png',
+                        width: 64,
+                      ),
                     ),
                     title: Text(
                       'Chủ đề',
@@ -98,7 +104,7 @@ class DrawerAdmin extends StatelessWidget {
                 //   ),
                 //   child: ListTile(
                 //     leading: Image.asset(
-                //       'images/vocabulary_icon.png',
+                //        'assets/images/vocabulary_icon.png',
                 //       width: 64,
                 //     ),
                 //     title: const Text(
@@ -121,7 +127,10 @@ class DrawerAdmin extends StatelessWidget {
                     vertical: Get.height * 0.02,
                   ),
                   child: ListTile(
-                    leading: Image.asset('images/logout_icon.png', width: 64),
+                    leading: Image.asset(
+                      'assets/images/logout_icon.png',
+                      width: 64,
+                    ),
                     title: Text(
                       'Đăng xuất',
                       style: TextStyle(

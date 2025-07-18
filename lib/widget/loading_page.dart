@@ -18,7 +18,7 @@ class LoadingPage extends StatelessWidget {
             alignment: Alignment.center,
             children: [
               const Image(
-                image: AssetImage('images/logo_icon.png'),
+                image: AssetImage('assets/images/logo_icon.png'),
                 height: 100,
               ),
               SpinKitDualRing(color: AppColor.blue, size: 130),

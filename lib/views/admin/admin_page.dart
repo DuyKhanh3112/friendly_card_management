@@ -64,7 +64,7 @@ class AdminPage extends StatelessWidget {
                           child: Row(
                             children: [
                               Image.asset(
-                                'images/personal_info_icon.png',
+                                'assets/images/personal_info_icon.png',
                                 width: 32,
                               ),
                               const SizedBox(width: 16),
@@ -83,7 +83,10 @@ class AdminPage extends StatelessWidget {
                           ),
                           child: Row(
                             children: [
-                              Image.asset('images/logout_icon.png', width: 32),
+                              Image.asset(
+                                'assets/images/logout_icon.png',
+                                width: 32,
+                              ),
                               const SizedBox(width: 16),
                               const Text('Đăng xuất'),
                             ],
