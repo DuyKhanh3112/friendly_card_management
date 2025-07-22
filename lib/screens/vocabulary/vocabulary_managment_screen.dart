@@ -26,9 +26,18 @@ class VocabularyManagmentScreen extends StatelessWidget {
         Get.find<VocabularyController>();
     TopicController topicController = Get.find<TopicController>();
     UsersController usersController = Get.find<UsersController>();
+    RxList<Vocabulary> listVocabulary = <Vocabulary>[].obs;
 
     RxInt currentPage = 0.obs;
+    RxInt offset = 0.obs;
+    RxInt limit = 6.obs;
     return Obx(() {
+      listVocabulary.value = vocabularyController.listVocabulary.value
+          .where(
+            (item) =>
+                item.status == Tool.listStatus[currentPage.value]['value'],
+          )
+          .toList();
       return vocabularyController.loading.value
           ? const LoadingPage()
           : SafeArea(
@@ -252,11 +261,13 @@ class VocabularyManagmentScreen extends StatelessWidget {
                           axisCount: GridLayoutEnum.twoElementsInRow,
                           crossAxisSpacing: 8,
                           mainAxisSpacing: 8,
-                          children: vocabularyController.listVocabulary.value
-                              .where(
-                                (item) =>
-                                    item.status ==
-                                    Tool.listStatus[currentPage.value]['value'],
+                          children: listVocabulary.value
+                              .getRange(
+                                offset.value * limit.value,
+                                (offset.value + 1) * limit.value >=
+                                        listVocabulary.value.length
+                                    ? listVocabulary.value.length
+                                    : (offset.value + 1) * limit.value,
                               )
                               .map((item) {
                                 return vocabularyItem(item);
@@ -264,6 +275,33 @@ class VocabularyManagmentScreen extends StatelessWidget {
                               .toList(),
                         ),
                       ),
+                    ],
+                  ),
+                ),
+                floatingActionButton: Container(
+                  width: Get.width * 0.975,
+                  height: Get.height * 0.6,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      offset.value != 0
+                          ? InkWell(
+                              onTap: () {
+                                offset.value = offset.value - 1;
+                              },
+                              child: Icon(Icons.arrow_left_rounded, size: 128),
+                            )
+                          : SizedBox(),
+                      (offset.value + 1) * limit.value <
+                              listVocabulary.value.length
+                          ? InkWell(
+                              onTap: () {
+                                offset.value = offset.value + 1;
+                              },
+                              child: Icon(Icons.arrow_right_rounded, size: 128),
+                            )
+                          : SizedBox(),
                     ],
                   ),
                 ),
@@ -294,6 +332,7 @@ class VocabularyManagmentScreen extends StatelessWidget {
                       .toList(),
                   currentIndex: currentPage.value,
                   onTap: (value) {
+                    offset.value = 0;
                     currentPage.value = value;
                   },
                 ),

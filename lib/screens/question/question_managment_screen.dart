@@ -25,9 +25,18 @@ class QuestionManagementScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     TopicController topicController = Get.find<TopicController>();
     QuestionController questionController = Get.find<QuestionController>();
+    RxList<Question> listQuestion = <Question>[].obs;
 
     RxInt currentPage = 0.obs;
+    RxInt offset = 0.obs;
+    RxInt limit = 6.obs;
     return Obx(() {
+      listQuestion.value = questionController.listQuestion.value
+          .where(
+            (item) =>
+                item.status == Tool.listStatus[currentPage.value]['value'],
+          )
+          .toList();
       return questionController.loading.value
           ? const LoadingPage()
           : SafeArea(
@@ -220,11 +229,13 @@ class QuestionManagementScreen extends StatelessWidget {
                           axisCount: GridLayoutEnum.twoElementsInRow,
                           crossAxisSpacing: 8,
                           mainAxisSpacing: 8,
-                          children: questionController.listQuestion.value
-                              .where(
-                                (item) =>
-                                    item.status ==
-                                    Tool.listStatus[currentPage.value]['value'],
+                          children: listQuestion.value
+                              .getRange(
+                                offset.value * limit.value,
+                                (offset.value + 1) * limit.value <
+                                        listQuestion.value.length
+                                    ? (offset.value + 1) * limit.value
+                                    : listQuestion.value.length,
                               )
                               .map((item) {
                                 return questionItem(item, context);
@@ -232,6 +243,33 @@ class QuestionManagementScreen extends StatelessWidget {
                               .toList(),
                         ),
                       ),
+                    ],
+                  ),
+                ),
+                floatingActionButton: Container(
+                  width: Get.width * 0.975,
+                  height: Get.height * 0.6,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      offset.value != 0
+                          ? InkWell(
+                              onTap: () {
+                                offset.value = offset.value - 1;
+                              },
+                              child: Icon(Icons.arrow_left_rounded, size: 128),
+                            )
+                          : SizedBox(),
+                      (offset.value + 1) * limit.value <
+                              listQuestion.value.length
+                          ? InkWell(
+                              onTap: () {
+                                offset.value = offset.value + 1;
+                              },
+                              child: Icon(Icons.arrow_right_rounded, size: 128),
+                            )
+                          : SizedBox(),
                     ],
                   ),
                 ),

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:friendly_card_management/controllers/main_controller.dart';
+import 'package:friendly_card_management/controllers/teacher_controller.dart';
 import 'package:friendly_card_management/models/users.dart';
 import 'package:get/get.dart';
 
@@ -51,6 +52,7 @@ class UsersController extends GetxController {
       }
       if (role.value == 'teacher') {
         loading.value = false;
+        await Get.find<TeacherController>().loadTeacherInfo(user.value.id);
         Get.toNamed('/teacher');
       }
       loading.value = false;

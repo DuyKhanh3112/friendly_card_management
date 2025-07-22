@@ -1,12 +1,16 @@
-// ignore_for_file: sized_box_for_whitespace, prefer_const_constructors
+// ignore_for_file: sized_box_for_whitespace, prefer_const_constructors, invalid_use_of_protected_member, avoid_unnecessary_containers
 
 import 'package:flutter/material.dart';
 import 'package:friendly_card_management/components/custom_button.dart';
 import 'package:friendly_card_management/components/custom_text_field.dart';
 import 'package:friendly_card_management/controllers/teacher_controller.dart';
+import 'package:friendly_card_management/models/teacher_info.dart';
 import 'package:friendly_card_management/utils/app_color.dart';
 import 'package:friendly_card_management/widget/loading_page.dart';
 import 'package:get/get.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:open_filex/open_filex.dart';
 
 class TeacherFormScreen extends StatelessWidget {
   const TeacherFormScreen({super.key});
@@ -28,6 +32,8 @@ class TeacherFormScreen extends StatelessWidget {
     );
 
     final formKey = GlobalKey<FormState>();
+    RxList<XFile> listFile = <XFile>[].obs;
+    RxList<TeacherInfo> listTeacherInfo = teacherController.listTeacherInfo;
 
     return Obx(() {
       return teacherController.loading.value
@@ -174,6 +180,156 @@ class TeacherFormScreen extends StatelessWidget {
                                     ),
                                   ),
                                 ),
+
+                          Container(
+                            // width: Get.width * 0.4,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: Get.width * 0.05,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  width: Get.width * 0.1,
+                                  child: Text(
+                                    'Văn bằng/Chứng chỉ: ',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColor.labelBlue,
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  width: Get.width * 0.2,
+                                  padding: EdgeInsets.all(12),
+                                  margin: EdgeInsets.all(8),
+                                  alignment: Alignment.center,
+                                  child: Column(
+                                    children: [
+                                      ...listTeacherInfo.map(
+                                        (info) => Container(
+                                          width: Get.width * 0.8,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              InkWell(
+                                                onTap: () {
+                                                  listTeacherInfo.removeWhere(
+                                                    (i) => i.id == info.id,
+                                                  );
+                                                },
+                                                child: Icon(
+                                                  Icons.cancel,
+                                                  color: AppColor.error,
+                                                ),
+                                              ),
+                                              InkWell(
+                                                onTap: () async {
+                                                  teacherController
+                                                          .loading
+                                                          .value =
+                                                      true;
+                                                  await OpenFilex.open(
+                                                    info.attachments,
+                                                  );
+                                                  teacherController
+                                                          .loading
+                                                          .value =
+                                                      false;
+                                                  return;
+                                                },
+                                                child: Container(
+                                                  width: Get.width * 0.15,
+                                                  child: Text(
+                                                    info.name,
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: AppColor.blue,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      ...listFile.map(
+                                        (file) => Container(
+                                          width: Get.width * 0.8,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              InkWell(
+                                                onTap: () {
+                                                  listFile.remove(file);
+                                                },
+                                                child: Icon(
+                                                  Icons.cancel,
+                                                  color: AppColor.error,
+                                                ),
+                                              ),
+                                              InkWell(
+                                                onTap: () async {
+                                                  teacherController
+                                                          .loading
+                                                          .value =
+                                                      true;
+                                                  await OpenFilex.open(
+                                                    file.path,
+                                                  );
+                                                  teacherController
+                                                          .loading
+                                                          .value =
+                                                      false;
+                                                  return;
+                                                },
+                                                child: Container(
+                                                  width: Get.width * 0.15,
+                                                  child: Text(
+                                                    file.name,
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: AppColor.blue,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  child: ElevatedButton(
+                                    onPressed: () async {
+                                      var result = await FilePicker.platform
+                                          .pickFiles(allowMultiple: true);
+                                      if (result != null) {
+                                        listFile.value = listFile.value
+                                            .where((test) => true)
+                                            .toList();
+                                        for (var file in result.files) {
+                                          listFile.value.add(file.xFile);
+                                        }
+                                      } else {
+                                        // User canceled the picker
+                                      }
+                                    },
+                                    child: Text('Chọn file'),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                           Container(
                             // width: Get.width * 0.4,
                             padding: EdgeInsets.symmetric(
@@ -207,13 +363,17 @@ class TeacherFormScreen extends StatelessWidget {
                                                 .value
                                                 .id ==
                                             '') {
-                                          await teacherController
-                                              .createTeacher();
+                                          await teacherController.createTeacher(
+                                            listFile.value,
+                                          );
                                         } else {
                                           await teacherController.updateTeacher(
                                             teacherController.teacher.value,
+                                            listFile.value,
+                                            listTeacherInfo.value,
                                           );
                                         }
+                                        // listFile.value = [];
                                       }
                                     },
                                     bgColor: AppColor.blue,

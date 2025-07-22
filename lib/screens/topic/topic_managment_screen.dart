@@ -59,6 +59,9 @@ class TopicManagmentScreen extends StatelessWidget {
       topicController.loadTopicTeacher();
     }
 
+    RxInt offset = 0.obs;
+    RxInt limit = 6.obs;
+
     return Obx(() {
       loadData(listTopic, searchController);
       return usersController.loading.value || topicController.loading.value
@@ -139,6 +142,13 @@ class TopicManagmentScreen extends StatelessWidget {
                             crossAxisSpacing: 8,
                             mainAxisSpacing: 8,
                             children: listTopic.value
+                                .getRange(
+                                  offset.value * limit.value,
+                                  (offset.value + 1) * limit.value >=
+                                          listTopic.value.length
+                                      ? listTopic.value.length
+                                      : (offset.value + 1) * limit.value,
+                                )
                                 .where(
                                   (item) =>
                                       item.status ==
@@ -150,6 +160,32 @@ class TopicManagmentScreen extends StatelessWidget {
                           ),
                         ),
                 ],
+              ),
+              floatingActionButton: Container(
+                width: Get.width * 0.975,
+                height: Get.height * 0.6,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    offset.value != 0
+                        ? InkWell(
+                            onTap: () {
+                              offset.value = offset.value - 1;
+                            },
+                            child: Icon(Icons.arrow_left_rounded, size: 128),
+                          )
+                        : SizedBox(),
+                    (offset.value + 1) * limit.value < listTopic.value.length
+                        ? InkWell(
+                            onTap: () {
+                              offset.value = offset.value + 1;
+                            },
+                            child: Icon(Icons.arrow_right_rounded, size: 128),
+                          )
+                        : SizedBox(),
+                  ],
+                ),
               ),
               backgroundColor: AppColor.lightBlue,
               bottomNavigationBar: BottomNavigationBar(
@@ -177,25 +213,9 @@ class TopicManagmentScreen extends StatelessWidget {
                       ),
                     )
                     .toList(),
-                // items: [
-                // BottomNavigationBarItem(
-                //   icon: Icon(Icons.check_circle),
-                //   label:
-                //       'Đã được duyệt (${listTopic.value.where((item) => item.status == 'active').length})',
-                // ),
-                // BottomNavigationBarItem(
-                //   icon: Icon(Icons.cancel),
-                //   label:
-                //       'Chờ duyệt (${listTopic.value.where((item) => item.status == 'draft').length})',
-                // ),
-                // BottomNavigationBarItem(
-                //   icon: Icon(Icons.cancel),
-                //   label:
-                //       'Không duyệt (${listTopic.value.where((item) => item.status == 'inactive').length})',
-                // ),
-                // ],
                 currentIndex: currentPage.value,
                 onTap: (value) {
+                  offset.value = 0;
                   currentPage.value = value;
                 },
               ),

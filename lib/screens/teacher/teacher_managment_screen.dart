@@ -22,6 +22,7 @@ class TeacherManagmentScreen extends StatelessWidget {
     Rx<TextEditingController> searchController,
   ) {
     TeacherController teacherController = Get.find<TeacherController>();
+
     listTeachers.value = teacherController.listTeachers
         .where(
           (t) =>
@@ -51,8 +52,12 @@ class TeacherManagmentScreen extends StatelessWidget {
     if (usersController.user.value.role == 'teacher') {
       teacherController.loadAllData();
     }
-
+    RxInt offset = 0.obs;
+    RxInt limit = 6.obs;
     return Obx(() {
+      // listTeachers.value = listTeachers.value
+      //     .where((t) => t.active == (currentPage == 0))
+      //     .toList();
       loadData(listTeachers, currentPage, searchController);
       return usersController.loading.value || teacherController.loading.value
           ? const LoadingPage()
@@ -130,6 +135,26 @@ class TeacherManagmentScreen extends StatelessWidget {
                             mainAxisSpacing: 8,
                             children: listTeachers.value
                                 .where((t) => t.active == (currentPage == 0))
+                                .toList()
+                                .getRange(
+                                  offset.value * limit.value,
+                                  (offset.value + 1) * limit.value >=
+                                          listTeachers.value
+                                              .where(
+                                                (t) =>
+                                                    t.active ==
+                                                    (currentPage == 0),
+                                              )
+                                              .length
+                                      ? listTeachers.value
+                                            .where(
+                                              (t) =>
+                                                  t.active ==
+                                                  (currentPage == 0),
+                                            )
+                                            .length
+                                      : (offset.value + 1) * limit.value,
+                                )
                                 .map((item) => itemTeacher(context, item))
                                 .toList(),
                           ),
@@ -167,8 +192,38 @@ class TeacherManagmentScreen extends StatelessWidget {
                 ],
                 currentIndex: currentPage.value,
                 onTap: (value) {
+                  offset.value = 0;
                   currentPage.value = value;
                 },
+              ),
+              floatingActionButton: Container(
+                width: Get.width * 0.975,
+                height: Get.height * 0.6,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    offset.value != 0
+                        ? InkWell(
+                            onTap: () {
+                              offset.value = offset.value - 1;
+                            },
+                            child: Icon(Icons.arrow_left_rounded, size: 128),
+                          )
+                        : SizedBox(),
+                    (offset.value + 1) * limit.value <
+                            listTeachers.value
+                                .where((t) => t.active == (currentPage == 0))
+                                .length
+                        ? InkWell(
+                            onTap: () {
+                              offset.value = offset.value + 1;
+                            },
+                            child: Icon(Icons.arrow_right_rounded, size: 128),
+                          )
+                        : SizedBox(),
+                  ],
+                ),
               ),
             );
     });
@@ -193,8 +248,9 @@ class TeacherManagmentScreen extends StatelessWidget {
         ],
       ),
       child: InkWell(
-        onTap: () {
+        onTap: () async {
           teacherController.teacher.value = item;
+          teacherController.loadTeacherInfo(item.id);
           Get.toNamed('/teacher_form');
         },
         child: Column(
@@ -233,7 +289,7 @@ class TeacherManagmentScreen extends StatelessWidget {
                             Users.initUser();
                         teacher.active = true;
                         teacher.reason_lock = '';
-                        await teacherController.updateTeacher(teacher);
+                        await teacherController.updateStatusTeacher(teacher);
                       } else {
                         TextEditingController reasonLockController =
                             TextEditingController();
@@ -340,7 +396,7 @@ class TeacherManagmentScreen extends StatelessWidget {
                                     teacher.reason_lock =
                                         reasonLockController.text;
                                     Get.back();
-                                    await teacherController.updateTeacher(
+                                    await teacherController.updateStatusTeacher(
                                       teacher,
                                     );
                                   }

@@ -4,18 +4,17 @@ class TeacherInfo {
   String id;
   String user_id;
   String attachments;
+  String name;
+
   TeacherInfo({
     required this.id,
     required this.user_id,
     required this.attachments,
+    required this.name,
   });
 
   factory TeacherInfo.initTeacherInfo() {
-    return TeacherInfo(
-      id: '',
-      user_id: '',
-      attachments: '',
-    );
+    return TeacherInfo(id: '', user_id: '', attachments: '', name: '');
   }
 
   static TeacherInfo fromJson(Map<String, dynamic> json) {
@@ -23,6 +22,7 @@ class TeacherInfo {
       id: json['id'],
       user_id: json['user_id'],
       attachments: json['attachments'],
+      name: json['name'],
     );
   }
 
@@ -31,6 +31,7 @@ class TeacherInfo {
       'id': id,
       'user_id': user_id,
       'attachments': attachments,
+      'name': name,
     };
   }
 
@@ -39,6 +40,7 @@ class TeacherInfo {
       // 'id': id,
       'user_id': user_id,
       'attachments': attachments,
+      'name': name,
     };
   }
 }
