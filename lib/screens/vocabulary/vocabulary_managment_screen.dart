@@ -257,22 +257,25 @@ class VocabularyManagmentScreen extends StatelessWidget {
                         child: Divider(color: AppColor.blue),
                       ),
                       Expanded(
-                        child: FlexibleGridView(
-                          axisCount: GridLayoutEnum.twoElementsInRow,
-                          crossAxisSpacing: 8,
-                          mainAxisSpacing: 8,
-                          children: listVocabulary.value
-                              .getRange(
-                                offset.value * limit.value,
-                                (offset.value + 1) * limit.value >=
-                                        listVocabulary.value.length
-                                    ? listVocabulary.value.length
-                                    : (offset.value + 1) * limit.value,
-                              )
-                              .map((item) {
-                                return vocabularyItem(item);
-                              })
-                              .toList(),
+                        child: Container(
+                          child: FlexibleGridView(
+                            axisCount: GridLayoutEnum.twoElementsInRow,
+                            crossAxisSpacing: 8,
+                            mainAxisSpacing: 8,
+
+                            children: listVocabulary.value
+                                .getRange(
+                                  offset.value * limit.value,
+                                  (offset.value + 1) * limit.value >=
+                                          listVocabulary.value.length
+                                      ? listVocabulary.value.length
+                                      : (offset.value + 1) * limit.value,
+                                )
+                                .map((item) {
+                                  return vocabularyItem(item);
+                                })
+                                .toList(),
+                          ),
                         ),
                       ),
                     ],

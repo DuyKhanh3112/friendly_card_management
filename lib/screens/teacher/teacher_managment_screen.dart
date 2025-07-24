@@ -250,7 +250,7 @@ class TeacherManagmentScreen extends StatelessWidget {
       child: InkWell(
         onTap: () async {
           teacherController.teacher.value = item;
-          teacherController.loadTeacherInfo(item.id);
+          await teacherController.loadTeacherInfo(item.id);
           Get.toNamed('/teacher_form');
         },
         child: Column(

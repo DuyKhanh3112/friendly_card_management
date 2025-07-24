@@ -58,9 +58,17 @@ class TeacherController extends GetxController {
     teach.update_at = Timestamp.now();
     teach.role = 'teacher';
     await usersCollection.doc(teach.id).update(teach.toVal());
-    await createTeacherInfor(listFile, teach.id);
 
+    listTeacherInfo.value
+        .where((item) => listInfo.where((i) => i.id == item.id).isEmpty)
+        .forEach((item) async {
+          await deleteTeacherInfo(item);
+        });
+    // listTeacherInfo.value = listInfo;
+
+    await createTeacherInfor(listFile, teach.id);
     await loadAllData();
+    await loadTeacherInfo(teach.id);
     loading.value = false;
   }
 
@@ -112,5 +120,12 @@ class TeacherController extends GetxController {
     }
     await loadTeacherInfo(user_id);
     loading.value = false;
+  }
+
+  Future<void> deleteTeacherInfo(TeacherInfo info) async {
+    await teacherInfoCollection.doc(info.id).delete();
+    await CloudinaryController().deleteImage(
+      'teacher/${info.user_id}/attachments/${info.id}',
+    );
   }
 }

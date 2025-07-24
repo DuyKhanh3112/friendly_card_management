@@ -57,7 +57,6 @@ class UserInformationScreen extends StatelessWidget {
                 child: Form(
                   key: formKey,
                   child: ListView(
-                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
                         width: Get.width * 0.4,

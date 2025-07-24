@@ -64,158 +64,191 @@ class QuestionManagementScreen extends StatelessWidget {
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(width: Get.width * 0.4),
-                            Container(
-                              width: Get.width * 0.05,
-                              padding: EdgeInsets.symmetric(
-                                vertical: Get.height * 0.02,
-                              ),
-                              child: IconButton(
-                                onPressed: () async {
-                                  await questionController.loadQuestionData();
-                                },
-                                icon: Icon(
-                                  Icons.refresh,
-                                  color: AppColor.lightBlue,
-                                ),
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                        AppColor.blue,
+                          children:
+                              Get.find<UsersController>().user.value.role ==
+                                  'teacher'
+                              ? [
+                                  Container(width: Get.width * 0.4),
+                                  Container(
+                                    width: Get.width * 0.05,
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: Get.height * 0.02,
+                                    ),
+                                    child: IconButton(
+                                      onPressed: () async {
+                                        await questionController
+                                            .loadQuestionData();
+                                      },
+                                      icon: Icon(
+                                        Icons.refresh,
+                                        color: AppColor.lightBlue,
                                       ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: Get.width * 0.2,
-                              decoration: const BoxDecoration(),
-                              child: CustomButton(
-                                title: 'Thêm câu hỏi',
-                                bgColor: AppColor.blue,
-                                onClicked: () async {
-                                  questionController.question.value =
-                                      Question.initQuestion();
-                                  await formQuestion(context);
-                                },
-                              ),
-                            ),
-                            Container(
-                              width: Get.width * 0.2,
-                              decoration: const BoxDecoration(),
-                              child: CustomButton(
-                                title: 'Tạo câu hỏi tự động',
-                                bgColor: AppColor.blue,
-                                onClicked: () async {
-                                  final formKey = GlobalKey<FormState>();
-                                  TextEditingController numController =
-                                      TextEditingController(text: '5');
-                                  await Get.dialog(
-                                    AlertDialog(
-                                      titlePadding: EdgeInsets.symmetric(
-                                        horizontal: Get.width * 0.025,
-                                        vertical: Get.width * 0.01,
-                                      ),
-                                      contentPadding: EdgeInsets.symmetric(
-                                        horizontal: Get.width * 0.025,
-                                        // vertical: Get.width * 0.01,
-                                      ),
-                                      buttonPadding: EdgeInsets.symmetric(
-                                        horizontal: Get.width * 0.025,
-                                        vertical: Get.width * 0.01,
-                                      ),
-                                      actionsPadding: EdgeInsets.symmetric(
-                                        horizontal: Get.width * 0.025,
-                                        vertical: Get.width * 0.01,
-                                      ),
-                                      title: Column(
-                                        children: [
-                                          Text(
-                                            'Số câu hỏi tạo tự động cho mỗi loại câu hỏi',
-                                            style: TextStyle(
-                                              fontSize: 28,
-                                              color: AppColor.blue,
-                                              fontWeight: FontWeight.bold,
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                              AppColor.blue,
                                             ),
-                                          ),
-                                          Divider(color: AppColor.blue),
-                                        ],
                                       ),
-                                      content: Container(
-                                        // width: Get.width * 0.5,
-                                        // height: Get.height * 0.3,
-                                        child: Form(
-                                          key: formKey,
-                                          child: CustomTextField(
-                                            controller: numController,
-                                            label: 'Số câu hỏi',
-                                            required: true,
-                                            type: ContactType.number,
-                                          ),
-                                        ),
-                                      ),
-                                      actions: [
-                                        Column(
-                                          children: [
-                                            Divider(color: AppColor.blue),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
+                                    ),
+                                  ),
+                                  Container(
+                                    width: Get.width * 0.2,
+                                    decoration: const BoxDecoration(),
+                                    child: CustomButton(
+                                      title: 'Thêm câu hỏi',
+                                      bgColor: AppColor.blue,
+                                      onClicked: () async {
+                                        questionController.question.value =
+                                            Question.initQuestion();
+                                        await formQuestion(context);
+                                      },
+                                    ),
+                                  ),
+                                  Container(
+                                    width: Get.width * 0.2,
+                                    decoration: const BoxDecoration(),
+                                    child: CustomButton(
+                                      title: 'Tạo câu hỏi tự động',
+                                      bgColor: AppColor.blue,
+                                      onClicked: () async {
+                                        final formKey = GlobalKey<FormState>();
+                                        TextEditingController numController =
+                                            TextEditingController(text: '5');
+                                        await Get.dialog(
+                                          AlertDialog(
+                                            titlePadding: EdgeInsets.symmetric(
+                                              horizontal: Get.width * 0.025,
+                                              vertical: Get.width * 0.01,
+                                            ),
+                                            contentPadding:
+                                                EdgeInsets.symmetric(
+                                                  horizontal: Get.width * 0.025,
+                                                  // vertical: Get.width * 0.01,
+                                                ),
+                                            buttonPadding: EdgeInsets.symmetric(
+                                              horizontal: Get.width * 0.025,
+                                              vertical: Get.width * 0.01,
+                                            ),
+                                            actionsPadding:
+                                                EdgeInsets.symmetric(
+                                                  horizontal: Get.width * 0.025,
+                                                  vertical: Get.width * 0.01,
+                                                ),
+                                            title: Column(
                                               children: [
-                                                ElevatedButton(
-                                                  style: ButtonStyle(
-                                                    backgroundColor:
-                                                        WidgetStatePropertyAll(
-                                                          Colors.red,
-                                                        ),
-                                                    foregroundColor:
-                                                        WidgetStatePropertyAll(
-                                                          Colors.white,
-                                                        ),
+                                                Text(
+                                                  'Số câu hỏi tạo tự động cho mỗi loại câu hỏi',
+                                                  style: TextStyle(
+                                                    fontSize: 28,
+                                                    color: AppColor.blue,
+                                                    fontWeight: FontWeight.bold,
                                                   ),
-                                                  onPressed: () {
-                                                    Get.back();
-                                                  },
-                                                  child: Text('Đóng'),
                                                 ),
-                                                SizedBox(width: 64),
-                                                ElevatedButton(
-                                                  style: ButtonStyle(
-                                                    backgroundColor:
-                                                        WidgetStatePropertyAll(
-                                                          AppColor.blue,
-                                                        ),
-                                                    foregroundColor:
-                                                        WidgetStatePropertyAll(
-                                                          Colors.white,
-                                                        ),
-                                                  ),
-                                                  onPressed: () async {
-                                                    if (formKey.currentState!
-                                                        .validate()) {
-                                                      Get.back();
-                                                      await questionController
-                                                          .generateQuestion(
-                                                            int.parse(
-                                                              numController
-                                                                  .text,
-                                                            ),
-                                                          );
-                                                    }
-                                                  },
-                                                  child: Text('Xác nhận'),
-                                                ),
+                                                Divider(color: AppColor.blue),
                                               ],
                                             ),
-                                          ],
-                                        ),
-                                      ],
+                                            content: Container(
+                                              // width: Get.width * 0.5,
+                                              // height: Get.height * 0.3,
+                                              child: Form(
+                                                key: formKey,
+                                                child: CustomTextField(
+                                                  controller: numController,
+                                                  label: 'Số câu hỏi',
+                                                  required: true,
+                                                  type: ContactType.number,
+                                                ),
+                                              ),
+                                            ),
+                                            actions: [
+                                              Column(
+                                                children: [
+                                                  Divider(color: AppColor.blue),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      ElevatedButton(
+                                                        style: ButtonStyle(
+                                                          backgroundColor:
+                                                              WidgetStatePropertyAll(
+                                                                Colors.red,
+                                                              ),
+                                                          foregroundColor:
+                                                              WidgetStatePropertyAll(
+                                                                Colors.white,
+                                                              ),
+                                                        ),
+                                                        onPressed: () {
+                                                          Get.back();
+                                                        },
+                                                        child: Text('Đóng'),
+                                                      ),
+                                                      SizedBox(width: 64),
+                                                      ElevatedButton(
+                                                        style: ButtonStyle(
+                                                          backgroundColor:
+                                                              WidgetStatePropertyAll(
+                                                                AppColor.blue,
+                                                              ),
+                                                          foregroundColor:
+                                                              WidgetStatePropertyAll(
+                                                                Colors.white,
+                                                              ),
+                                                        ),
+                                                        onPressed: () async {
+                                                          if (formKey
+                                                              .currentState!
+                                                              .validate()) {
+                                                            Get.back();
+                                                            await questionController
+                                                                .generateQuestion(
+                                                                  int.parse(
+                                                                    numController
+                                                                        .text,
+                                                                  ),
+                                                                );
+                                                          }
+                                                        },
+                                                        child: Text('Xác nhận'),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
                                     ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
+                                  ),
+                                ]
+                              : [
+                                  Container(width: Get.width * 0.4),
+                                  Container(
+                                    width: Get.width * 0.05,
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: Get.height * 0.02,
+                                    ),
+                                    child: IconButton(
+                                      onPressed: () async {
+                                        await questionController
+                                            .loadQuestionData();
+                                      },
+                                      icon: Icon(
+                                        Icons.refresh,
+                                        color: AppColor.lightBlue,
+                                      ),
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                              AppColor.blue,
+                                            ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                         ),
                       ),
                       Container(
@@ -560,6 +593,8 @@ class QuestionManagementScreen extends StatelessWidget {
                               .obs,
                           label: 'Loại câu hỏi',
                           width: Get.width * 0.5,
+                          disabled:
+                              usersController.user.value.role != 'teacher',
                           onChanged: (p0) {
                             if (p0 == null) {
                               questionType.value =
@@ -582,17 +617,24 @@ class QuestionManagementScreen extends StatelessWidget {
                               }
                               return ListTile(
                                 leading: InkWell(
-                                  onTap: () {
-                                    item.is_correct = true;
-                                    for (var element in listOption.value) {
-                                      if (listOption.value.indexOf(element) ==
-                                          index) {
-                                        element.value = item;
-                                      } else {
-                                        element.value.is_correct = false;
-                                      }
-                                    }
-                                  },
+                                  onTap:
+                                      usersController.user.value.role !=
+                                          'teacher'
+                                      ? null
+                                      : () {
+                                          item.is_correct = true;
+                                          for (var element
+                                              in listOption.value) {
+                                            if (listOption.value.indexOf(
+                                                  element,
+                                                ) ==
+                                                index) {
+                                              element.value = item;
+                                            } else {
+                                              element.value.is_correct = false;
+                                            }
+                                          }
+                                        },
                                   child: Icon(
                                     item.is_correct
                                         ? Icons.check_box_outlined
@@ -608,6 +650,9 @@ class QuestionManagementScreen extends StatelessWidget {
                                       ? Colors.amber
                                       : null,
                                   required: true,
+                                  readOnly:
+                                      usersController.user.value.role !=
+                                      'teacher',
                                   onChanged: (p0) {
                                     item.content = p0;
                                     for (var element in listOption.value) {

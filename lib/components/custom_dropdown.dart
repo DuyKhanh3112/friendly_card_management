@@ -15,6 +15,7 @@ class CustomDropdown extends StatelessWidget {
     required this.onChanged,
     required this.label,
     required this.width,
+    this.disabled,
   });
 
   final void Function(dynamic) onChanged;
@@ -23,6 +24,7 @@ class CustomDropdown extends StatelessWidget {
   final Rx<dynamic> value;
   final String label;
   final double width;
+  final bool? disabled;
 
   @override
   Widget build(BuildContext context) {
@@ -61,20 +63,31 @@ class CustomDropdown extends StatelessWidget {
               ),
               alignment: Alignment.centerLeft,
               child: DropdownButtonHideUnderline(
-                child: DropdownButton2(
-                  items: items,
-                  value: value.value,
-                  onChanged: (item) {
-                    value.value = item;
-                    onChanged(item);
-                  },
-                  hint: Text(
-                    'Chọn ${label.toLowerCase()}',
-                    style: TextStyle(color: AppColor.blue, fontSize: 18),
-                  ),
-                  style: TextStyle(color: AppColor.blue, fontSize: 18),
-                  isExpanded: true,
-                ),
+                child: disabled == true
+                    ? DropdownButton2(
+                        items: items,
+                        value: value.value,
+                        hint: Text(
+                          'Chọn ${label.toLowerCase()}',
+                          style: TextStyle(color: AppColor.blue, fontSize: 18),
+                        ),
+                        style: TextStyle(color: AppColor.blue, fontSize: 18),
+                        isExpanded: true,
+                      )
+                    : DropdownButton2(
+                        items: items,
+                        value: value.value,
+                        onChanged: (item) {
+                          value.value = item;
+                          onChanged(item);
+                        },
+                        hint: Text(
+                          'Chọn ${label.toLowerCase()}',
+                          style: TextStyle(color: AppColor.blue, fontSize: 18),
+                        ),
+                        style: TextStyle(color: AppColor.blue, fontSize: 18),
+                        isExpanded: true,
+                      ),
               ),
             ),
           ],

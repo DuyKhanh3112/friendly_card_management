@@ -33,7 +33,9 @@ class TeacherFormScreen extends StatelessWidget {
 
     final formKey = GlobalKey<FormState>();
     RxList<XFile> listFile = <XFile>[].obs;
-    RxList<TeacherInfo> listTeacherInfo = teacherController.listTeacherInfo;
+    RxList<TeacherInfo> listTeacherInfo = <TeacherInfo>[].obs;
+    listTeacherInfo.value = [];
+    listTeacherInfo.value.addAll(teacherController.listTeacherInfo.value);
 
     return Obx(() {
       return teacherController.loading.value
@@ -373,7 +375,13 @@ class TeacherFormScreen extends StatelessWidget {
                                             listTeacherInfo.value,
                                           );
                                         }
-                                        // listFile.value = [];
+                                        listFile.value = [];
+                                        listTeacherInfo.value = [];
+                                        listTeacherInfo.value.addAll(
+                                          teacherController
+                                              .listTeacherInfo
+                                              .value,
+                                        );
                                       }
                                     },
                                     bgColor: AppColor.blue,
