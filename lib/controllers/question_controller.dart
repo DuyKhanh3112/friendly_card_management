@@ -206,7 +206,9 @@ class QuestionController extends GetxController {
     String names = '';
     await vocabularyController.loadVocabularyTopic();
 
-    for (var element in vocabularyController.listVocabulary) {
+    for (var element in vocabularyController.listVocabulary.value.where(
+      (v) => v.status == 'active',
+    )) {
       names += '${element.name}, ';
     }
 
