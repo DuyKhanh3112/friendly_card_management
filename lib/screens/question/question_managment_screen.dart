@@ -447,26 +447,55 @@ class QuestionManagementScreen extends StatelessWidget {
             itemBuilder: (context) =>
                 Get.find<UsersController>().user.value.role == 'teacher'
                 ? []
-                : Tool.listStatus
-                      .where((stt) => stt['value'] != item.status)
-                      .map(
-                        (stt) => PopupMenuItem(
-                          value: stt['value'].toString(),
-                          child: ListTile(
-                            leading: Icon(Icons.circle, color: stt['color']),
-                            textColor: stt['color'],
-                            titleTextStyle: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                            title: Text(stt['label']),
-                          ),
-                        ),
-                      )
-                      .toList(),
+                : item.status == 'await'
+                ? [
+                    PopupMenuItem(
+                      value: 'active',
+                      child: ListTile(
+                        leading: Icon(Icons.circle, color: Colors.green),
+                        textColor: Colors.green,
+                        titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+                        title: Text('Duyệt'),
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: 'inactive',
+                      child: ListTile(
+                        leading: Icon(Icons.circle, color: Colors.grey),
+                        textColor: Colors.grey,
+                        titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+                        title: Text('Không duyệt'),
+                      ),
+                    ),
+                  ]
+                : item.status == 'active'
+                ? [
+                    PopupMenuItem(
+                      value: 'inactive',
+                      child: ListTile(
+                        leading: Icon(Icons.circle, color: Colors.grey),
+                        textColor: Colors.grey,
+                        titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+                        title: Text('Không duyệt'),
+                      ),
+                    ),
+                  ]
+                : item.status == 'inactive'
+                ? [
+                    PopupMenuItem(
+                      value: 'active',
+                      child: ListTile(
+                        leading: Icon(Icons.circle, color: Colors.green),
+                        textColor: Colors.green,
+                        titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+                        title: Text('Duyệt'),
+                      ),
+                    ),
+                  ]
+                : [],
+
             onSelected: (value) async {
               await questionController.updateStatusQuestion(item, value);
-              // await topicController.updateTopicStatus(item);
-              // await vocabularyController.updateStatusVocabulary(item);
             },
           ),
         ),
@@ -809,45 +838,12 @@ class QuestionManagementScreen extends StatelessWidget {
                           )
                         : SizedBox(),
                     usersController.user.value.role == 'admin'
-                        ? Row(
-                            children: Tool.listStatus
-                                .where(
-                                  (stt) =>
-                                      stt['value'] !=
-                                      questionController.question.value.status,
-                                )
-                                .map(
-                                  (stt) => Row(
-                                    children: [
-                                      SizedBox(width: 64),
-                                      ElevatedButton(
-                                        style: ButtonStyle(
-                                          backgroundColor:
-                                              WidgetStatePropertyAll(
-                                                stt['color'],
-                                              ),
-                                          foregroundColor:
-                                              WidgetStatePropertyAll(
-                                                Colors.white,
-                                              ),
-                                        ),
-                                        onPressed: () async {
-                                          Get.back();
-                                          await questionController
-                                              .updateStatusQuestion(
-                                                questionController
-                                                    .question
-                                                    .value,
-                                                stt['value'],
-                                              );
-                                        },
-                                        child: Text(stt['label']),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                                .toList(),
-                          )
+                        ? questionController.question.value.status == 'active'
+                              ? btnActive()
+                              : questionController.question.value.status ==
+                                    'inactive'
+                              ? btnInactive()
+                              : btnAwait()
                         : SizedBox(),
                   ],
                 ),
@@ -856,6 +852,74 @@ class QuestionManagementScreen extends StatelessWidget {
           ],
         );
       }),
+    );
+  }
+
+  Widget btnActive() {
+    return Row(
+      children: [
+        buttonStatus({
+          'label': 'Không duyệt',
+          'value': 'inactive',
+          'color': AppColor.grey,
+        }),
+      ],
+    );
+  }
+
+  Widget btnInactive() {
+    return Row(
+      children: [
+        buttonStatus({
+          'label': 'Duyệt',
+          'value': 'active',
+          'color': AppColor.green,
+        }),
+      ],
+    );
+  }
+
+  Widget btnAwait() {
+    return Row(
+      children: [
+        buttonStatus({
+          'label': 'Duyệt',
+          'value': 'active',
+          'color': AppColor.green,
+        }),
+        buttonStatus({
+          'label': 'Không duyệt',
+          'value': 'inactive',
+          'color': AppColor.grey,
+        }),
+      ],
+    );
+  }
+
+  Widget buttonStatus(Map<String, dynamic> stt) {
+    QuestionController questionController = Get.find<QuestionController>();
+    return Row(
+      children: [
+        SizedBox(width: 64),
+        ElevatedButton(
+          style: ButtonStyle(
+            backgroundColor: WidgetStatePropertyAll(stt['color']),
+            foregroundColor: WidgetStatePropertyAll(Colors.white),
+          ),
+          onPressed: () async {
+            Get.back();
+            // await topicController.updateTopicStatus(
+            //   topicController.topic.value,
+            //   stt['value'],
+            // );
+            await questionController.updateStatusQuestion(
+              questionController.question.value,
+              stt['value'],
+            );
+          },
+          child: Text(stt['label']),
+        ),
+      ],
     );
   }
 }

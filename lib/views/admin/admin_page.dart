@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:friendly_card_management/controllers/main_controller.dart';
 import 'package:friendly_card_management/controllers/users_controller.dart';
+import 'package:friendly_card_management/utils/tool.dart';
 import 'package:friendly_card_management/widget/loading_page.dart';
 import 'package:friendly_card_management/utils/app_color.dart';
 import 'package:friendly_card_management/views/admin/drawer_admin.dart';
@@ -47,7 +48,11 @@ class AdminPage extends StatelessWidget {
                           return;
                         }
                         if (value == 'profile') {
-                          mainController.numPageAdmin.value = 0;
+                          Get.toNamed('/person_info');
+                          return;
+                        }
+                        if (value == 'change_pass') {
+                          usersController.changePassword(context);
                           return;
                         }
                       },
@@ -72,6 +77,25 @@ class AdminPage extends StatelessWidget {
                             ],
                           ),
                         ),
+
+                        PopupMenuItem<String>(
+                          value: 'change_pass',
+                          labelTextStyle: WidgetStatePropertyAll(
+                            TextStyle(
+                              fontSize: 18,
+                              color: AppColor.blue,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(Icons.lock, size: 32, color: AppColor.blue),
+                              const SizedBox(width: 16),
+                              const Text('Đổi mật khẩu'),
+                            ],
+                          ),
+                        ),
+
                         PopupMenuItem<String>(
                           value: 'logout',
                           labelTextStyle: WidgetStatePropertyAll(
@@ -95,8 +119,22 @@ class AdminPage extends StatelessWidget {
                       ],
                       icon: Row(
                         children: [
+                          CircleAvatar(
+                            radius: 28,
+                            backgroundImage: NetworkImage(
+                              (usersController.user.value.avatar != null &&
+                                      usersController
+                                          .user
+                                          .value
+                                          .avatar!
+                                          .isNotEmpty)
+                                  ? usersController.user.value.avatar!
+                                  : 'https://res.cloudinary.com/drir6xyuq/image/upload/v1749203203/logo_icon.png',
+                            ),
+                            backgroundColor: Colors.transparent,
+                          ),
                           Text(
-                            usersController.user.value.fullname,
+                            '${usersController.user.value.fullname} (Quản trị viên)',
                             style: const TextStyle(
                               // fontSize: 28,
                               color: Colors.white,

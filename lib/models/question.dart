@@ -29,7 +29,7 @@ class Question {
       mean: '',
       topic_id: '',
       update_at: Timestamp.now(),
-      status: 'draft',
+      status: 'await',
     );
   }
 
@@ -41,7 +41,7 @@ class Question {
       mean: json['mean'],
       topic_id: json['topic_id'],
       update_at: json['update_at'],
-      status: json['status'] ?? 'draft',
+      status: json['status'] ?? 'await',
     );
   }
 
@@ -53,7 +53,7 @@ class Question {
       'mean': mean,
       'topic_id': topic_id,
       'update_at': update_at,
-      'status': status
+      'status': status,
     };
   }
 
@@ -65,7 +65,7 @@ class Question {
       'mean': mean,
       'topic_id': topic_id,
       'update_at': update_at,
-      'status': status
+      'status': status,
     };
   }
 }

@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:friendly_card_management/config.dart';
 import 'package:friendly_card_management/controllers/cloudinary_controller.dart';
 import 'package:friendly_card_management/controllers/topic_controller.dart';
+import 'package:friendly_card_management/controllers/users_controller.dart';
 import 'package:friendly_card_management/models/vocabulary.dart';
 import 'package:friendly_card_management/utils/tool.dart';
 import 'package:get/get.dart';
@@ -33,6 +34,30 @@ class VocabularyController extends GetxController {
       listVocabulary.add(Vocabulary.fromJson(data));
     }
     loading.value = false;
+  }
+
+  Future<int> countVocabularyByStatus(String status) async {
+    if (Get.find<UsersController>().user.value.role == 'admin') {
+      var snapshoot = await vocabularyCollection
+          .where('status', isEqualTo: status)
+          .get();
+      return snapshoot.docs.length;
+    } else {
+      if (Get.find<TopicController>().listTopics.isEmpty) {
+        print('1');
+        return 0;
+      }
+      var snapshoot = await vocabularyCollection
+          .where('status', isEqualTo: status)
+          .where(
+            'topic_id',
+            whereIn: Get.find<TopicController>().listTopics.value.map(
+              (t) => t.id,
+            ),
+          )
+          .get();
+      return snapshoot.docs.length;
+    }
   }
 
   Future<void> createVocabulary(Vocabulary item, String imgBase64) async {
@@ -78,7 +103,7 @@ class VocabularyController extends GetxController {
           "parts": [
             {
               "text":
-                  "Hãy cho tôi $num từ vựng tiếng Anh là danh từ, " +
+                  "Hãy cho tôi $num từ vựng tiếng Anh, " +
                   "với chủ đề ${topicController.topic.value.name == '' ? 'Động vật' : topicController.topic.value.name}," +
                   " trả về gồm: từ vựng tiếng Anh, nghĩa tiếng Việt, ví dụ, nghĩa tiếng Việt của ví dụ và phiên âm. " +
                   "Dạng mảng bao gồm: vocabulary, mean, example, mean_example, transcription. ${names != '' ? "Khác các từ : $names" : ''}",

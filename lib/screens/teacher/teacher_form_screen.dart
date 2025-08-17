@@ -1,7 +1,9 @@
 // ignore_for_file: sized_box_for_whitespace, prefer_const_constructors, invalid_use_of_protected_member, avoid_unnecessary_containers
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:friendly_card_management/components/custom_button.dart';
+import 'package:friendly_card_management/components/custom_dialog.dart';
 import 'package:friendly_card_management/components/custom_text_field.dart';
 import 'package:friendly_card_management/controllers/teacher_controller.dart';
 import 'package:friendly_card_management/models/teacher_info.dart';
@@ -368,6 +370,17 @@ class TeacherFormScreen extends StatelessWidget {
                                           await teacherController.createTeacher(
                                             listFile.value,
                                           );
+                                          showAlertDialog(
+                                            context,
+                                            DialogType.success,
+                                            'Tạo tài khoản giáo viên thành công',
+                                            '',
+                                          );
+                                          usernameController.clear();
+                                          fullnameController.clear();
+                                          phonenameController.clear();
+                                          emailnameController.clear();
+                                          listFile.value = [];
                                         } else {
                                           await teacherController.updateTeacher(
                                             teacherController.teacher.value,

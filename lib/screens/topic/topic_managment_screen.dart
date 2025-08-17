@@ -55,9 +55,9 @@ class TopicManagmentScreen extends StatelessWidget {
     RxList<Topic> listTopic = <Topic>[].obs;
 
     RxInt currentPage = 0.obs;
-    if (usersController.user.value.role == 'teacher') {
-      topicController.loadTopicTeacher();
-    }
+    // if (usersController.user.value.role == 'teacher') {
+    //   topicController.loadTopicTeacher();
+    // }
 
     RxInt offset = 0.obs;
     RxInt limit = 6.obs;
@@ -293,57 +293,72 @@ class TopicManagmentScreen extends StatelessWidget {
                     itemBuilder: (context) =>
                         usersController.user.value.role == 'teacher'
                         ? []
-                        : Tool.listStatus
-                              .where((stt) => stt['value'] != item.status)
-                              .map(
-                                (stt) => PopupMenuItem(
-                                  value: stt['value'].toString(),
-                                  child: ListTile(
-                                    leading: Icon(
-                                      Icons.circle,
-                                      color: stt['color'],
-                                    ),
-                                    textColor: stt['color'],
-                                    titleTextStyle: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    title: Text(stt['label']),
-                                  ),
+                        : item.status == 'await'
+                        ? [
+                            PopupMenuItem(
+                              value: 'active',
+                              child: ListTile(
+                                leading: Icon(
+                                  Icons.circle,
+                                  color: Colors.green,
                                 ),
-                              )
-                              .toList(),
-                    // : item.status == 'darft'
-                    //     ? [
-                    //         PopupMenuItem(
-                    //           value: 'active',
-                    //           child: ListTile(
-                    //             leading: Icon(
-                    //               Icons.circle,
-                    //               color: Colors.grey,
-                    //             ),
-                    //             textColor: Colors.grey,
-                    //             titleTextStyle: TextStyle(
-                    //               fontWeight: FontWeight.bold,
-                    //             ),
-                    //             title: Text('Duyệt'),
-                    //           ),
-                    //         ),
-                    //         PopupMenuItem(
-                    //           value: 'inactive',
-                    //           child: ListTile(
-                    //             leading: Icon(
-                    //               Icons.circle,
-                    //               color: AppColor.blue,
-                    //             ),
-                    //             textColor: AppColor.blue,
-                    //             titleTextStyle: TextStyle(
-                    //               fontWeight: FontWeight.bold,
-                    //             ),
-                    //             title: Text('Không duyệt'),
-                    //           ),
-                    //         ),
-                    //       ]
-                    //     : [],
+                                textColor: Colors.green,
+                                titleTextStyle: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                title: Text('Duyệt'),
+                              ),
+                            ),
+                            PopupMenuItem(
+                              value: 'inactive',
+                              child: ListTile(
+                                leading: Icon(
+                                  Icons.circle,
+                                  color: AppColor.grey,
+                                ),
+                                textColor: AppColor.grey,
+                                titleTextStyle: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                title: Text('Không duyệt'),
+                              ),
+                            ),
+                          ]
+                        : item.status == 'active'
+                        ? [
+                            PopupMenuItem(
+                              value: 'inactive',
+                              child: ListTile(
+                                leading: Icon(
+                                  Icons.circle,
+                                  color: AppColor.grey,
+                                ),
+                                textColor: AppColor.grey,
+                                titleTextStyle: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                title: Text('Không duyệt'),
+                              ),
+                            ),
+                          ]
+                        : item.status == 'inactive'
+                        ? [
+                            PopupMenuItem(
+                              value: 'active',
+                              child: ListTile(
+                                leading: Icon(
+                                  Icons.circle,
+                                  color: Colors.green,
+                                ),
+                                textColor: Colors.green,
+                                titleTextStyle: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                title: Text('Duyệt'),
+                              ),
+                            ),
+                          ]
+                        : [],
                     onSelected: (value) async {
                       await topicController.updateTopicStatus(item, value);
                     },
@@ -549,7 +564,8 @@ class TopicManagmentScreen extends StatelessWidget {
                       },
                       child: Text('Đóng'),
                     ),
-                    usersController.user.value.role == 'teacher'
+                    usersController.user.value.role == 'teacher' &&
+                            topicController.topic.value.status != 'active'
                         ? Row(
                             children: [
                               SizedBox(width: 64),
@@ -568,6 +584,8 @@ class TopicManagmentScreen extends StatelessWidget {
                                         nameController.text;
                                     topicController.topic.value.user_id =
                                         usersController.user.value.id;
+                                    topicController.topic.value.status =
+                                        'await';
                                     topicController.topic.value.update_at =
                                         Timestamp.now();
                                     Get.back();
@@ -634,43 +652,11 @@ class TopicManagmentScreen extends StatelessWidget {
                           )
                         : SizedBox(),
                     usersController.user.value.role == 'admin'
-                        ? Row(
-                            children: Tool.listStatus
-                                .where(
-                                  (stt) =>
-                                      stt['value'] !=
-                                      topicController.topic.value.status,
-                                )
-                                .map(
-                                  (stt) => Row(
-                                    children: [
-                                      SizedBox(width: 64),
-                                      ElevatedButton(
-                                        style: ButtonStyle(
-                                          backgroundColor:
-                                              WidgetStatePropertyAll(
-                                                stt['color'],
-                                              ),
-                                          foregroundColor:
-                                              WidgetStatePropertyAll(
-                                                Colors.white,
-                                              ),
-                                        ),
-                                        onPressed: () async {
-                                          Get.back();
-                                          await topicController
-                                              .updateTopicStatus(
-                                                topicController.topic.value,
-                                                stt['value'],
-                                              );
-                                        },
-                                        child: Text(stt['label']),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                                .toList(),
-                          )
+                        ? topicController.topic.value.status == 'active'
+                              ? btnActive()
+                              : topicController.topic.value.status == 'inactive'
+                              ? btnInactive()
+                              : btnAwait()
                         : SizedBox(),
                   ],
                 ),
@@ -679,6 +665,70 @@ class TopicManagmentScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget btnActive() {
+    return Row(
+      children: [
+        buttonStatus({
+          'label': 'Không duyệt',
+          'value': 'inactive',
+          'color': AppColor.grey,
+        }),
+      ],
+    );
+  }
+
+  Widget btnInactive() {
+    return Row(
+      children: [
+        buttonStatus({
+          'label': 'Duyệt',
+          'value': 'active',
+          'color': AppColor.green,
+        }),
+      ],
+    );
+  }
+
+  Widget btnAwait() {
+    return Row(
+      children: [
+        buttonStatus({
+          'label': 'Duyệt',
+          'value': 'active',
+          'color': AppColor.green,
+        }),
+        buttonStatus({
+          'label': 'Không duyệt',
+          'value': 'inactive',
+          'color': AppColor.grey,
+        }),
+      ],
+    );
+  }
+
+  Widget buttonStatus(Map<String, dynamic> stt) {
+    TopicController topicController = Get.find<TopicController>();
+    return Row(
+      children: [
+        SizedBox(width: 64),
+        ElevatedButton(
+          style: ButtonStyle(
+            backgroundColor: WidgetStatePropertyAll(stt['color']),
+            foregroundColor: WidgetStatePropertyAll(Colors.white),
+          ),
+          onPressed: () async {
+            Get.back();
+            await topicController.updateTopicStatus(
+              topicController.topic.value,
+              stt['value'],
+            );
+          },
+          child: Text(stt['label']),
+        ),
+      ],
     );
   }
 }

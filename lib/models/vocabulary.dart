@@ -33,7 +33,7 @@ class Vocabulary {
       name: '',
       topic_id: '',
       update_at: Timestamp.now(),
-      status: 'draft',
+      status: 'await',
       image: '',
       example: '',
       mean: '',
@@ -44,16 +44,17 @@ class Vocabulary {
 
   static Vocabulary fromJson(Map<String, dynamic> json) {
     return Vocabulary(
-        id: json['id'],
-        name: json['name'],
-        topic_id: json['topic_id'],
-        status: json['status'] ?? 'draft',
-        update_at: json['update_at'],
-        image: json['image'],
-        example: json['example'],
-        mean: json['mean'],
-        transcription: json['transcription'],
-        mean_example: json['mean_example']);
+      id: json['id'],
+      name: json['name'],
+      topic_id: json['topic_id'],
+      status: json['status'] ?? 'await',
+      update_at: json['update_at'],
+      image: json['image'],
+      example: json['example'],
+      mean: json['mean'],
+      transcription: json['transcription'],
+      mean_example: json['mean_example'],
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -67,7 +68,7 @@ class Vocabulary {
       'example': example,
       'mean': mean,
       'transcription': transcription,
-      'mean_example': mean_example
+      'mean_example': mean_example,
     };
   }
 
@@ -82,7 +83,7 @@ class Vocabulary {
       'example': example,
       'mean': mean,
       'transcription': transcription,
-      'mean_example': mean_example
+      'mean_example': mean_example,
     };
   }
 }

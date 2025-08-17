@@ -40,6 +40,8 @@ class TeacherManagmentScreen extends StatelessWidget {
               )),
         )
         .toList();
+
+    listTeachers.sort((a, b) => b.update_at.compareTo(a.update_at));
   }
 
   @override

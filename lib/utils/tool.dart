@@ -4,7 +4,7 @@ import 'package:friendly_card_management/utils/app_color.dart';
 
 class Tool {
   static List<Map<String, dynamic>> listStatus = [
-    {'value': 'draft', 'label': 'Chờ duyệt', 'color': AppColor.warm},
+    {'value': 'await', 'label': 'Chờ duyệt', 'color': AppColor.warm},
     {'value': 'active', 'label': 'Đã duyệt', 'color': AppColor.green},
     {'value': 'inactive', 'label': 'Không duyệt', 'color': AppColor.grey},
   ];
@@ -57,7 +57,7 @@ class Tool {
   }
 
   // static String getLabelStatus(String status) {
-  //   if (status == 'draft') {
+  //   if (status == 'await') {
   //     return 'Đang chờ duyệt';
   //   }
   //   return '';

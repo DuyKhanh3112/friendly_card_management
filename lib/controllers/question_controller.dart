@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:friendly_card_management/config.dart';
 import 'package:friendly_card_management/controllers/topic_controller.dart';
+import 'package:friendly_card_management/controllers/users_controller.dart';
 import 'package:friendly_card_management/controllers/vocabulary_controller.dart';
 import 'package:friendly_card_management/models/option.dart';
 import 'package:friendly_card_management/models/question.dart';
@@ -60,6 +61,29 @@ class QuestionController extends GetxController {
     }
 
     loading.value = false;
+  }
+
+  Future<int> countQuestionStatus(String status) async {
+    if (Get.find<UsersController>().user.value.role == 'admin') {
+      var snapshoot = await questionCollection
+          .where('status', isEqualTo: status)
+          .get();
+      return snapshoot.docs.length;
+    } else {
+      if (Get.find<TopicController>().listTopics.isEmpty) {
+        return 0;
+      }
+      var snapshoot = await questionCollection
+          .where('status', isEqualTo: status)
+          .where(
+            'topic_id',
+            whereIn: Get.find<TopicController>().listTopics.value.map(
+              (t) => t.id,
+            ),
+          )
+          .get();
+      return snapshoot.docs.length;
+    }
   }
 
   Future<void> loadOption() async {
@@ -206,9 +230,7 @@ class QuestionController extends GetxController {
     String names = '';
     await vocabularyController.loadVocabularyTopic();
 
-    for (var element in vocabularyController.listVocabulary.value.where(
-      (v) => v.status == 'active',
-    )) {
+    for (var element in vocabularyController.listVocabulary.value) {
       names += '${element.name}, ';
     }
 
@@ -250,7 +272,7 @@ class QuestionController extends GetxController {
               mean: item['mean_question'],
               topic_id: topicController.topic.value.id,
               update_at: Timestamp.now(),
-              status: 'draft',
+              status: 'await',
             );
             await createQuestionGenerate(
               quest,

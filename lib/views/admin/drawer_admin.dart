@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:friendly_card_management/controllers/main_controller.dart';
+import 'package:friendly_card_management/controllers/overview_controller.dart';
 import 'package:friendly_card_management/controllers/users_controller.dart';
 import 'package:friendly_card_management/utils/app_color.dart';
 import 'package:get/get.dart';
@@ -19,30 +20,63 @@ class DrawerAdmin extends StatelessWidget {
           Expanded(
             child: ListView(
               children: [
+                SizedBox(height: Get.height * 0.05),
                 Container(
                   padding: EdgeInsets.symmetric(
                     horizontal: Get.width * 0.01,
-                    vertical: Get.height * 0.02,
+                    vertical: Get.height * 0.01,
                   ),
                   child: ListTile(
-                    leading: Image.asset(
-                      'assets/images/personal_info_icon.png',
-                      width: 64,
+                    leading: Container(
+                      padding: const EdgeInsets.symmetric(
+                        // horizontal: 5,
+                        vertical: 3,
+                      ),
+                      child: Image.asset(
+                        'assets/images/overview_icon.png',
+                        width: 64,
+                      ),
                     ),
                     title: Text(
-                      'Thông tin cá nhân',
+                      'Tổng quan',
                       style: TextStyle(
                         color: AppColor.blue,
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    onTap: () {
+                    onTap: () async {
                       mainController.numPageAdmin.value = 0;
+
                       Get.back();
+                      await Get.find<OverviewController>().getStatistic();
                     },
                   ),
                 ),
+                // Container(
+                //   padding: EdgeInsets.symmetric(
+                //     horizontal: Get.width * 0.01,
+                //     vertical: Get.height * 0.02,
+                //   ),
+                //   child: ListTile(
+                //     leading: Image.asset(
+                //       'assets/images/personal_info_icon.png',
+                //       width: 64,
+                //     ),
+                //     title: Text(
+                //       'Thông tin cá nhân',
+                //       style: TextStyle(
+                //         color: AppColor.blue,
+                //         fontSize: 22,
+                //         fontWeight: FontWeight.bold,
+                //       ),
+                //     ),
+                //     onTap: () {
+                //       mainController.numPageAdmin.value = 0;
+                //       Get.back();
+                //     },
+                //   ),
+                // ),
                 Container(
                   padding: EdgeInsets.symmetric(
                     horizontal: Get.width * 0.01,
@@ -63,6 +97,30 @@ class DrawerAdmin extends StatelessWidget {
                     ),
                     onTap: () {
                       mainController.numPageAdmin.value = 1;
+                      Get.back();
+                    },
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Get.width * 0.01,
+                    vertical: Get.height * 0.02,
+                  ),
+                  child: ListTile(
+                    leading: Image.asset(
+                      'assets/images/learner_icon.png',
+                      width: 64,
+                    ),
+                    title: Text(
+                      'Người học',
+                      style: TextStyle(
+                        color: AppColor.blue,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    onTap: () {
+                      mainController.numPageAdmin.value = 3;
                       Get.back();
                     },
                   ),
@@ -104,11 +162,11 @@ class DrawerAdmin extends StatelessWidget {
                 //   ),
                 //   child: ListTile(
                 //     leading: Image.asset(
-                //        'assets/images/vocabulary_icon.png',
+                //       'assets/images/vocabulary_icon.png',
                 //       width: 64,
                 //     ),
                 //     title: const Text(
-                //       'Từ vựng',
+                //       'Tổng quan',
                 //       style: TextStyle(
                 //         // color: Colors.green,
                 //         fontSize: 22,

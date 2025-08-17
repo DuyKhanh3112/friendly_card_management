@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:friendly_card_management/screens/question/question_managment_screen.dart';
+import 'package:friendly_card_management/screens/user/user_information_screen.dart';
 import 'package:friendly_card_management/screens/vocabulary/vocabulary_managment_screen.dart';
 import 'package:friendly_card_management/utils/inital_binding.dart';
 import 'package:friendly_card_management/views/admin/admin_page.dart';
@@ -54,6 +55,11 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: '/',
           page: () => const LoginPage(),
+          // binding:
+        ),
+        GetPage(
+          name: '/person_info',
+          page: () => const UserInformationScreen(),
           // binding:
         ),
         GetPage(name: '/admin', page: () => const AdminPage()),

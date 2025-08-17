@@ -43,7 +43,11 @@ class TeacherPage extends StatelessWidget {
                           return;
                         }
                         if (value == 'profile') {
-                          mainController.numPageTeacher.value = 0;
+                          Get.toNamed('/person_info');
+                          return;
+                        }
+                        if (value == 'change_pass') {
+                          usersController.changePassword(context);
                           return;
                         }
                       },
@@ -69,6 +73,27 @@ class TeacherPage extends StatelessWidget {
                           ),
                         ),
                         PopupMenuItem<String>(
+                          value: 'change_pass',
+                          labelTextStyle: WidgetStatePropertyAll(
+                            TextStyle(
+                              fontSize: 18,
+                              color: AppColor.blue,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                'assets/images/personal_info_icon.png',
+                                width: 32,
+                              ),
+                              const SizedBox(width: 16),
+                              const Text('Đổi mật khẩu'),
+                            ],
+                          ),
+                        ),
+
+                        PopupMenuItem<String>(
                           value: 'logout',
                           labelTextStyle: WidgetStatePropertyAll(
                             TextStyle(
@@ -91,8 +116,16 @@ class TeacherPage extends StatelessWidget {
                       ],
                       icon: Row(
                         children: [
+                          CircleAvatar(
+                            radius: 28,
+                            backgroundImage: NetworkImage(
+                              usersController.user.value.avatar ??
+                                  'https://res.cloudinary.com/drir6xyuq/image/upload/v1749203203/logo_icon.png',
+                            ),
+                            backgroundColor: Colors.transparent,
+                          ),
                           Text(
-                            usersController.user.value.fullname,
+                            '${usersController.user.value.fullname} (Giáo viên)',
                             style: const TextStyle(
                               // fontSize: 28,
                               color: Colors.white,

@@ -1,7 +1,10 @@
 // ignore_for_file: invalid_use_of_protected_member, non_constant_identifier_names, unnecessary_brace_in_string_interps
 
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:friendly_card_management/controllers/cloudinary_controller.dart';
+import 'package:friendly_card_management/controllers/main_controller.dart';
 import 'package:friendly_card_management/models/teacher_info.dart';
 import 'package:friendly_card_management/models/users.dart';
 import 'package:get/get.dart';
@@ -90,10 +93,13 @@ class TeacherController extends GetxController {
     teacher.value.update_at = Timestamp.now();
     teacher.value.role = 'teacher';
     teacher.value.password = teacher.value.username;
+    teacher.value.avatar =
+        'https://res.cloudinary.com/drir6xyuq/image/upload/v1749203203/logo_icon.png';
     batch.set(refTeacher, teacher.value.toVal());
     await batch.commit();
     createTeacherInfor(listFile, id);
     await loadAllData();
+    unawaited(Get.find<MainController>().sendMailWelcome(teacher.value));
     teacher.value = Users.initTeacher();
     loading.value = false;
   }

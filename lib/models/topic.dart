@@ -25,7 +25,7 @@ class Topic {
       name: '',
       user_id: '',
       update_at: Timestamp.now(),
-      status: 'draft',
+      status: 'await',
       image: '',
     );
   }
@@ -35,7 +35,7 @@ class Topic {
       id: json['id'],
       name: json['name'],
       user_id: json['user_id'],
-      status: json['status'] ?? 'draft',
+      status: json['status'] ?? 'await',
       update_at: json['update_at'],
       image: json['image'],
     );

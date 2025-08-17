@@ -18,9 +18,8 @@ class TopicController extends GetxController {
   UsersController usersController = Get.find<UsersController>();
 
   Future<void> loadTopicTeacher() async {
-    listTopics.value = [];
     loading.value = true;
-
+    listTopics.value = [];
     var snapshoot = await topicCollection
         .where('user_id', isEqualTo: usersController.user.value.id)
         .get();

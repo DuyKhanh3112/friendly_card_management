@@ -1,4 +1,6 @@
+import 'package:friendly_card_management/controllers/learner_controller.dart';
 import 'package:friendly_card_management/controllers/main_controller.dart';
+import 'package:friendly_card_management/controllers/overview_controller.dart';
 import 'package:friendly_card_management/controllers/question_controller.dart';
 import 'package:friendly_card_management/controllers/teacher_controller.dart';
 import 'package:friendly_card_management/controllers/topic_controller.dart';
@@ -14,7 +16,9 @@ class InitalBinding extends Bindings {
     Get.put(TeacherController());
     Get.put(TopicController());
     Get.put(VocabularyController());
+    Get.put(LearnerController());
     Get.put(QuestionController());
+    Get.put(OverviewController());
 
     await Get.find<QuestionController>().loadQuestionType();
     // Get.find<UsersController>().checkLogin();
