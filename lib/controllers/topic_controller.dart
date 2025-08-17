@@ -45,12 +45,12 @@ class TopicController extends GetxController {
     loading.value = false;
   }
 
-  Future<void> createTopic(String imgBase64) async {
+  Future<void> createTopic(String img) async {
     loading.value = true;
     WriteBatch batch = FirebaseFirestore.instance.batch();
     String id = topicCollection.doc().id;
-    String imgUrl = await CloudinaryController().uploadImage(
-      imgBase64,
+    String imgUrl = await CloudinaryController().uploadImageFile(
+      img,
       id,
       'topic/$id',
     );
@@ -64,12 +64,12 @@ class TopicController extends GetxController {
     loading.value = false;
   }
 
-  Future<void> updateTopic(String imgBase64) async {
+  Future<void> updateTopic(String img) async {
     loading.value = true;
     topic.value.update_at = Timestamp.now();
-    if (imgBase64 != '') {
-      String imgUrl = await CloudinaryController().uploadImage(
-        imgBase64,
+    if (img != '') {
+      String imgUrl = await CloudinaryController().uploadImageFile(
+        img,
         topic.value.id,
         'topic',
       );

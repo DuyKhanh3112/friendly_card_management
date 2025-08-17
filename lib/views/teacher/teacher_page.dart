@@ -16,11 +16,7 @@ class TeacherPage extends StatelessWidget {
     MainController mainController = Get.find<MainController>();
 
     return Obx(() {
-      return
-      // !usersController.checkLogin()
-      //     ? const LoginPage()
-      //     :
-      usersController.loading.value
+      return usersController.loading.value
           ? const LoadingPage()
           : SafeArea(
               child: Scaffold(

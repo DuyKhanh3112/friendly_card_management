@@ -392,7 +392,7 @@ class TopicManagmentScreen extends StatelessWidget {
     );
     final formKey = GlobalKey<FormState>();
 
-    RxString imgBase64 = ''.obs;
+    RxString filePath = ''.obs;
     RxString imgUrl = topicController.topic.value.image.obs;
 
     await Get.dialog(
@@ -456,6 +456,12 @@ class TopicManagmentScreen extends StatelessWidget {
                           onTap: usersController.user.value.role != 'teacher'
                               ? null
                               : () async {
+                                  var result = await ImagePicker().pickImage(
+                                    source: ImageSource.gallery,
+                                  );
+                                  if (result != null) {
+                                    filePath.value = result.path;
+                                  }
                                   // if (kIsWeb) {
                                   //   var result =
                                   //       await ImagePickerWeb.getImageAsBytes();
@@ -477,15 +483,15 @@ class TopicManagmentScreen extends StatelessWidget {
                                 Radius.circular(32),
                               ),
                               image: topicController.topic.value.id == ''
-                                  ? imgBase64.value == ''
+                                  ? filePath.value == ''
                                         ? null
                                         : DecorationImage(
-                                            image: MemoryImage(
-                                              base64Decode(imgBase64.value),
+                                            image: FileImage(
+                                              File(filePath.value),
                                             ),
                                             fit: BoxFit.cover,
                                           )
-                                  : imgBase64.value == ''
+                                  : filePath.value == ''
                                   ? imgUrl.value == ''
                                         ? null
                                         : DecorationImage(
@@ -493,9 +499,7 @@ class TopicManagmentScreen extends StatelessWidget {
                                             fit: BoxFit.cover,
                                           )
                                   : DecorationImage(
-                                      image: MemoryImage(
-                                        base64Decode(imgBase64.value),
-                                      ),
+                                      image: FileImage(File(filePath.value)),
                                       fit: BoxFit.cover,
                                     ),
                               color: Colors.white,
@@ -569,11 +573,11 @@ class TopicManagmentScreen extends StatelessWidget {
                                     Get.back();
                                     if (topicController.topic.value.id == '') {
                                       await topicController.createTopic(
-                                        imgBase64.value,
+                                        filePath.value,
                                       );
                                     } else {
                                       await topicController.updateTopic(
-                                        imgBase64.value,
+                                        filePath.value,
                                       );
                                     }
                                   }
