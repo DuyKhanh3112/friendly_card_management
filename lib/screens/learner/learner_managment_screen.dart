@@ -3,10 +3,8 @@
 import 'package:convert_vietnamese/convert_vietnamese.dart';
 import 'package:flexible_grid_view/flexible_grid_view.dart';
 import 'package:flutter/material.dart';
-import 'package:friendly_card_management/components/custom_button.dart';
 import 'package:friendly_card_management/components/custom_search_field.dart';
 import 'package:friendly_card_management/controllers/learner_controller.dart';
-import 'package:friendly_card_management/controllers/teacher_controller.dart';
 import 'package:friendly_card_management/controllers/users_controller.dart';
 import 'package:friendly_card_management/widget/empty_data.dart';
 import 'package:friendly_card_management/widget/loading_page.dart';
@@ -219,7 +217,6 @@ class LearnerManagmentScreen extends StatelessWidget {
   }
 
   Widget itemTeacher(BuildContext context, Users item) {
-    LearnerController learnerController = Get.find<LearnerController>();
     return Container(
       margin: EdgeInsets.symmetric(
         horizontal: Get.width * 0.03,

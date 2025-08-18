@@ -44,7 +44,6 @@ class VocabularyController extends GetxController {
       return snapshoot.docs.length;
     } else {
       if (Get.find<TopicController>().listTopics.isEmpty) {
-        print('1');
         return 0;
       }
       var snapshoot = await vocabularyCollection

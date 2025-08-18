@@ -398,7 +398,6 @@ class LoginPage extends StatelessWidget {
   }
 
   Future<void> changePasswordForm(BuildContext context) async {
-    UsersController usersController = Get.find<UsersController>();
     final formKey = GlobalKey<FormState>();
     TextEditingController passwordController = TextEditingController();
     TextEditingController passConfController = TextEditingController();

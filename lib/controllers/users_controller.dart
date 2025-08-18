@@ -1,3 +1,5 @@
+// ignore_for_file: sized_box_for_whitespace
+
 import 'dart:async';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -404,7 +406,6 @@ class UsersController extends GetxController {
   }
 
   Future<void> changePasswordForm(BuildContext context) async {
-    UsersController usersController = Get.find<UsersController>();
     final formKey = GlobalKey<FormState>();
     TextEditingController passwordController = TextEditingController();
     TextEditingController passConfController = TextEditingController();

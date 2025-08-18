@@ -1,4 +1,4 @@
-// ignore_for_file: sized_box_for_whitespace, prefer_const_constructors, invalid_use_of_protected_member, avoid_unnecessary_containers
+// ignore_for_file: sized_box_for_whitespace, prefer_const_constructors, invalid_use_of_protected_member, avoid_unnecessary_containers, use_build_context_synchronously
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
